@@ -8,3 +8,5 @@ The result of completing the technical specifications is:
 1. Ansible playbook (together with roles and/or a file with dependencies, necessary templates);
 2. docker-compose.yml
 3. Dockerfile
+
+

@@ -1,0 +1,54 @@
+services:
+  zabbix:
+    image: zabbix/zabbix-server-mysql:alpine-7.0.0
+    depends_on:
+      - db-mysql
+    restart: on-failure
+    container_name: zabbix-01
+    init: true
+    environment:
+      MYSQL_USER: "some-user"
+      MYSQL_PASSWORD: "some-password"
+      DB_SERVER_HOST: "172.16.1.7"
+      DB_SERVER_PORT: "3306"
+    networks:
+      zabbix_net:
+        ipv4_address: 172.16.1.5
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - zabbix
+    restart: on-failure
+    container_name: nginx
+    networks:
+      zabbix_net:
+        ipv4_address: 172.16.1.6
+
+  db-mysql:
+    container_name: db-mysql
+    image: mysql:lts
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_USER: "user" # to .env
+      MYSQL_PASSWORD: "password" # to .env
+      MYSQL_DATABASE: "database" # to .env
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      zabbix_net:
+        ipv4_address: 172.16.1.7
+
+  networks:
+    zabbix_net:
+      driver: bridge
+      ipam:
+        config:
+          - subnet: 172.16.1.0/24
