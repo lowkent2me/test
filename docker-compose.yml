@@ -6,26 +6,30 @@ services:
     restart: on-failure
     container_name: zabbix-01
     init: true
+    ports:
+      - "10051:10051"
     environment:
-      MYSQL_USER: "some-user"
-      MYSQL_PASSWORD: "some-password"
-      DB_SERVER_HOST: "172.16.1.7"
-      DB_SERVER_PORT: "3306"
+      - MYSQL_USER=${USR}
+      - MYSQL_PASSWORD=${PASS}
+      - DB_SERVER_DBNAME=${DATABASE}
+      - DB_SERVER_HOST="172.16.1.7"
+      - DB_SERVER_PORT=3306
+    entrypoint: [top]
     networks:
-      zabbix_net:
+      net_zabbix:
         ipv4_address: 172.16.1.5
 
   nginx:
     image: nginx:stable
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     depends_on:
       - zabbix
     restart: on-failure
     container_name: nginx
     networks:
-      zabbix_net:
+      net_zabbix:
         ipv4_address: 172.16.1.6
 
   db-mysql:
@@ -33,22 +37,23 @@ services:
     image: mysql:lts
     ports:
       - "3306:3306"
+#    entrypoint: [env]
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-      MYSQL_USER: "user" # to .env
-      MYSQL_PASSWORD: "password" # to .env
-      MYSQL_DATABASE: "database" # to .env
+      - MYSQL_ALLOW_EMPTY_PASSWORD="no"
+      - MYSQL_USER=${USR}
+      - MYSQL_PASSWORD=${PASS}
+      - MYSQL_DATABASE=${DATABASE}
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
     networks:
-      zabbix_net:
+      net_zabbix:
         ipv4_address: 172.16.1.7
 
-  networks:
-    zabbix_net:
-      driver: bridge
-      ipam:
-        config:
-          - subnet: 172.16.1.0/24
+networks:
+  net_zabbix:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
