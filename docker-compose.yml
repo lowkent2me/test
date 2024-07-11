@@ -11,9 +11,9 @@ services:
       - "10051:10051"
     environment:
       - DB_SERVER_HOST=db-mysql
-      - MYSQL_DATABASE={{ database }}
-      - MYSQL_USER={{ usr }}
-      - MYSQL_PASSWORD={{ pass }}
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_USER=${USR}
+      - MYSQL_PASSWORD=${PASS}
       - MYSQL_ROOT_PASSWORD=root_pwd
       - ZBX_JAVAGATEWAY=zabbix-java-gateway
     networks:
@@ -34,9 +34,9 @@ services:
     tty: true
     environment:
       - DB_SERVER_HOST=db-mysql
-      - MYSQL_DATABASE={{ database }}
-      - MYSQL_USER={{ usr }}
-      - MYSQL_PASSWORD={{ pass }}
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_USER=${USR}
+      - MYSQL_PASSWORD=${PASS}
       - MYSQL_ROOT_PASSWORD=root_pwd
       - ZBX_JAVAGATEWAY=zabbix-java-gateway
     networks:
@@ -55,9 +55,9 @@ services:
       # Only during upgrade from versions prior 6.4 and new installations (schema deployment)
       - --log_bin_trust_function_creators=1
     environment:
-      - MYSQL_DATABASE={{ database }}
-      - MYSQL_USER={{ usr }}
-      - MYSQL_PASSWORD={{ pass }}
+      - MYSQL_DATABASE=${DATABASE}
+      - MYSQL_USER=${USR}
+      - MYSQL_PASSWORD=${PASS}
       - MYSQL_ROOT_PASSWORD=root_pwd
       - character-set-server=utf8
       - collation-server=utf8_bin

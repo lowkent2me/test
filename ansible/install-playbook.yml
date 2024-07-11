@@ -26,12 +26,12 @@
 
     - name: Add zabbix systemd service file
       copy:
-        src: ./unit/app.service
+        src: unit/zabbix.service
         dest: /etc/systemd/system
 
     - name: Start zabbix systemd service
       systemd:
-        name: app
+        name: zabbix
         enabled: yes
         state: started
         daemon_reload: yes

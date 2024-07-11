@@ -8,10 +8,18 @@
     group: root
     mode: 0750
 
+- name: Copy .env file
+  template:
+    src: env.j2
+    dest: /opt/zabbix/.env
+    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
+    group: root
+    mode: 0750
+
 - name: Copy compose file
   copy:
     src: docker-compose.yml
-    dest: /opt/zabbix
+    dest: /opt/zabbix/
     owner: '{{ lookup("ansible.builtin.env", "USER") }}'
     group: root
     mode: 0750

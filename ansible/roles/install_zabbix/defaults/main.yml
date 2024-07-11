@@ -1,5 +1,5 @@
 ---
-USR: zbx
-PASS: zabbix123
-DATABASE: zabbix
+usr: zbx
+pass: zabbix123
+database: zabbix
 # defaults file for install_zabbix
