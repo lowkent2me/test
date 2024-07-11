@@ -1,0 +1,19 @@
+---
+# tasks file for install_zabbix
+- name: Add zabbix work directory on remote/local host
+  file:
+    path: /opt/zabbix
+    state: directory
+    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
+    group: root
+    mode: 0750
+
+- name: Copy compose file
+  copy:
+    src: docker-compose.yml
+    dest: /opt/zabbix
+    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
+    group: root
+    mode: 0750
+
+

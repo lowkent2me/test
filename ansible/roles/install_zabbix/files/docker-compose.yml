@@ -1,4 +1,5 @@
 services:
+
   zabbix:
     image: zabbix/zabbix-server-mysql:alpine-7.0.0
     depends_on:
@@ -18,6 +19,8 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.5
+    volumes:
+      - /opt/zabbix/data:/var/lib/zabbix
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:alpine-7.0.0

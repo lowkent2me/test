@@ -1,0 +1,13 @@
+[Unit]
+Description=zabbbix unit
+
+[Service]
+Type=forking
+WorkingDirectory=/opt/zabbix/
+ExecStart=/bin/bash -c 'sudo docker compose up'
+ExecStop=/bin/bash -c 'sudo docker compose down'
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

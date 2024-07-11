@@ -1,0 +1,47 @@
+---
+# command to run: ansible-playbook install-playbook.yml -i inventory.ini -e "target=<host or group of hosts in inventary" -K
+- name: prepare server for app
+  hosts: "{{ target }}"
+  become: yes
+
+  pre_tasks:
+
+    - name: Check if docker is installed
+      shell:
+        cmd: docker --version
+      register: docker_installed
+      ignore_errors: yes
+
+    - name: Check if docker compose is installed
+      shell:
+        cmd: docker compose version
+      register: docker_compose_installed
+      ignore_errors: yes
+
+  roles:
+    - { role: install_docker_engine, when: (docker_installed.failed) or (docker_compose_installed.failed)  }
+    - install_zabbix
+
+  tasks:
+
+    - name: Add zabbix systemd service file
+      copy:
+        src: ./unit/app.service
+        dest: /etc/systemd/system
+
+    - name: Start zabbix systemd service
+      systemd:
+        name: app
+        enabled: yes
+        state: started
+        daemon_reload: yes
+
+  handlers:
+    - name: Restart zabbix
+      service:
+        name: app
+        state: restarted
+
+    - name: Restart zabbix web
+      shell:
+        cmd: docker restart web-zabbix
