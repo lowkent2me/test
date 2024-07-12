@@ -2,6 +2,7 @@ services:
 
   zabbix:
     image: zabbix/zabbix-server-mysql:alpine-7.0.0
+    user: root
     depends_on:
       - db-mysql
     restart: unless-stopped
@@ -21,10 +22,10 @@ services:
         ipv4_address: 172.16.1.5
     volumes:
       - /opt/zabbix/data:/var/lib/zabbix
-      - /opt/zabbix/zabbix_server.conf:/etc/zabbix/zabbix_server.conf:ro
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:alpine-7.0.0
+    user: root
     ports:
       - "80:8080"
     depends_on:
@@ -43,13 +44,16 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.6
-    volumes:
-      - /opt/zabbix/nginx:/etc/nginx:ro
+    configs:
+     - source: zabbix-web
+       target: /etc/nginx/http.d/nginx.conf
+       mode: 0755
 
   db-mysql:
     container_name: db-mysql
     tty: true
     image: mysql:8.0-oracle
+    user: root
     command:
       - mysqld
       - --skip-mysqlx
@@ -72,9 +76,12 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.7
+    volumes:
+      - /opt/zabbix/mysql.data:/var/lib/mysql
 
   java-gateway:
     image: zabbix/zabbix-java-gateway:alpine-7.0.0
+    user: root
     restart: unless-stopped
     container_name: zabbix-java-gateway
     tty: true
@@ -88,3 +95,7 @@ networks:
     ipam:
       config:
         - subnet: 172.16.1.0/24
+
+configs:
+  zabbix-web:
+    file: /opt/zabbix/nginx.conf

@@ -9,4 +9,8 @@ The result of completing the technical specifications is:
 2. docker-compose.yml
 3. Dockerfile
 
+# Solution
+
+It was decided to use Zabbix as a web application, because it meets all requirements (PHP, Nginx, Mysql)
+
 

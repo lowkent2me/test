@@ -22,7 +22,6 @@ services:
         ipv4_address: 172.16.1.5
     volumes:
       - /opt/zabbix/data:/var/lib/zabbix
-#      - /opt/zabbix/data/zabbix.bin:/etc/zabbix/
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:alpine-7.0.0
@@ -45,8 +44,6 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.6
-#    volumes:
-#      - /opt/zabbix/nginx:/etc/nginx
     configs:
      - source: zabbix-web
        target: /etc/nginx/http.d/nginx.conf
