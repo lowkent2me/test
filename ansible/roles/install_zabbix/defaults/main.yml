@@ -2,4 +2,5 @@
 usr: zbx
 pass: zabbix123
 database: zabbix
+db_host: db-mysql
 # defaults file for install_zabbix

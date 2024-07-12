@@ -2,15 +2,16 @@ services:
 
   zabbix:
     image: zabbix/zabbix-server-mysql:alpine-7.0.0
+    user: root
     depends_on:
-      - db-mysql
+      - {{ db_host }}
     restart: unless-stopped
     container_name: zabbix-server
     tty: true
     ports:
       - "10051:10051"
     environment:
-      - DB_SERVER_HOST=db-mysql
+      - DB_SERVER_HOST={{ db_host }}
       - MYSQL_DATABASE={{ database }}
       - MYSQL_USER={{ usr }}
       - MYSQL_PASSWORD={{ pass }}
@@ -21,19 +22,21 @@ services:
         ipv4_address: 172.16.1.5
     volumes:
       - /opt/zabbix/data:/var/lib/zabbix
+#      - /opt/zabbix/data/zabbix.bin:/etc/zabbix/
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-mysql:alpine-7.0.0
+    user: root
     ports:
       - "80:8080"
     depends_on:
       - zabbix
-      - db-mysql
+      - {{ db_host }}
     restart: unless-stopped
     container_name: web-zabbix
     tty: true
     environment:
-      - DB_SERVER_HOST=db-mysql
+      - DB_SERVER_HOST={{ db_host }}
       - MYSQL_DATABASE={{ database }}
       - MYSQL_USER={{ usr }}
       - MYSQL_PASSWORD={{ pass }}
@@ -42,11 +45,18 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.6
+#    volumes:
+#      - /opt/zabbix/nginx:/etc/nginx
+    configs:
+     - source: zabbix-web
+       target: /etc/nginx/http.d/nginx.conf
+       mode: 0755
 
-  db-mysql:
-    container_name: db-mysql
+  {{ db_host }}:
+    container_name: {{ db_host }}
     tty: true
     image: mysql:8.0-oracle
+    user: root
     command:
       - mysqld
       - --skip-mysqlx
@@ -69,9 +79,12 @@ services:
     networks:
       net_zabbix:
         ipv4_address: 172.16.1.7
+    volumes:
+      - /opt/zabbix/mysql.data:/var/lib/mysql
 
   java-gateway:
     image: zabbix/zabbix-java-gateway:alpine-7.0.0
+    user: root
     restart: unless-stopped
     container_name: zabbix-java-gateway
     tty: true
@@ -85,3 +98,7 @@ networks:
     ipam:
       config:
         - subnet: 172.16.1.0/24
+
+configs:
+  zabbix-web:
+    file: /opt/zabbix/nginx.conf

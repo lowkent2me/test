@@ -4,24 +4,43 @@
   file:
     path: /opt/zabbix
     state: directory
-    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
-    group: root
-    mode: 0750
+    mode: 0755
 
 - name: Copy .env file
   template:
     src: env.j2
     dest: /opt/zabbix/.env
-    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
-    group: root
-    mode: 0750
+    mode: 0755
 
 - name: Copy compose file
+  template:
+    src: docker-compose.j2
+    dest: /opt/zabbix/docker-compose.yml
+    mode: 0755
+  notify: Restart zabbix stack
+
+- name: Copy zabbix conf file
+  template:
+    src: zabbix_server.j2
+    dest: /opt/zabbix/zabbix_server.conf
+    mode: 0755
+  notify: Restart zabbix server
+
+- name: Create nginx config file from template
+  template:
+    src: nginx.j2
+    dest: /opt/zabbix/nginx.conf
+    mode: 0755
+  notify: Restart zabbix web
+
+- name: Add zabbix systemd service file
   copy:
-    src: docker-compose.yml
-    dest: /opt/zabbix/
-    owner: '{{ lookup("ansible.builtin.env", "USER") }}'
-    group: root
-    mode: 0750
+    src: zabbix.service
+    dest: /etc/systemd/system
 
-
+- name: Start zabbix systemd service
+  systemd:
+    name: zabbix
+    enabled: yes
+    state: started
+    daemon_reload: yes
