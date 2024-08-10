@@ -1,0 +1,23 @@
+- name: Add Docker repo
+  yum_repository:
+    name: docker
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+    description: Official Docker repo
+    gpgcheck: no
+
+- name: Install latest version
+  dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    update_cache: yes
+    state: latest
+
+- name: Start Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
