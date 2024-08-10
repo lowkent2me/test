@@ -1,10 +1,10 @@
 wazuh:
   hosts:
     master:
-      ansible_host: 192.168.30.131
+      ansible_host: 192.168.3.131
       ansible_user: admin
       ansible_ssh_private_key_file: ./secrets/id_rsa_master
     slave:
-      ansible_host: 192.168.30.130
+      ansible_host: 192.168.3.130
       ansible_user: user
       ansible_ssh_private_key_file: ./secrets/id_rsa
