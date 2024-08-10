@@ -1,0 +1,7 @@
+---
+- name: Install Docker
+  hots: all
+  become: yes
+
+  roles:
+    - { role: install_docker, when: inventory_hostname == master }
