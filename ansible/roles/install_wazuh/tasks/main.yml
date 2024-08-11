@@ -1,0 +1,29 @@
+- name: Create Wazuh workdir
+  become: true
+  file:
+    path: '{{ workdir }}'
+    state: directory
+    mode: 0755
+
+- name: Clone Wazuh repo
+  git:
+    repo: 'https://github.com/wazuh/wazuh-docker.git'
+    dest: '{{ workdir }}'
+    version: v4.8.1
+    single_branch: yes
+
+- name: set vm.max_map_count to 262144 in sysctl
+  sysctl: name={{ item.key }} value={{ item.value }}
+  with_items:
+    - { key: "vm.max_map_count", value: "262144" }
+
+- name: Run the certificate creation script
+  shell: docker-compose -f generate-indexer-certs.yml run --rm generator
+  args:
+    chdir: '{{ workdir }}'
+
+- name: Start Wazuh with docker-compose
+  docker_compose:
+    project_src: '{{ workdir }}'
+    pull: missing
+
