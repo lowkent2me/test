@@ -22,17 +22,15 @@
   args:
     chdir: '{{ workdir }}/single-node'
 
-- name: Add pip for python
-  dnf:
-    name: python3-pip
-    state: latest
+- name: Add wazuh systemd service file
+  template:
+    src: wazuh.j2
+    dest: /etc/systemd/system/wazuh.service
+    mode: 0755
 
-- name: Add Docker SDK for python
-  pip:
-    name:
-      - 'docker'
-      - 'docker-compose'
-
-- name: Start Wazuh with docker-compose
-  docker_compose:
-    project_src: '{{ workdir }}/single-node'
+- name: Start wazuh systemd service
+  systemd:
+    name: wazuh
+    enabled: yes
+    state: started
+    daemon_reload: yes
