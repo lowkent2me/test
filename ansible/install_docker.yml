@@ -4,5 +4,5 @@
   become: yes
 
   roles:
-    - { role: install_docker, when: inventory_hostname == master }
-    - { role: install_wazuh, when: inventory_hostname is master }
+    - { role: install_docker, when: inventory_hostname == 'master' }
+    - { role: install_wazuh, when: inventory_hostname is "master" }
