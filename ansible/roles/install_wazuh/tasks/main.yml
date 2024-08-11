@@ -22,6 +22,15 @@
   args:
     chdir: '{{ workdir }}/single-node'
 
+- name: Add pip for python
+  dnf:
+    name: python3-pip
+    state: latest
+
+- name: Add Docker SDK for python
+  pip:
+    name: docker
+
 - name: Start Wazuh with docker-compose
   docker_compose:
     project_src: '{{ workdir }}'
