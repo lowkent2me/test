@@ -4,8 +4,8 @@ Description=wazuh unit
 [Service]
 Type=forking
 WorkingDirectory= {{ workdir }}/single-node
-ExecStart=/bin/bash -c 'sudo docker compose up'
-ExecStop=/bin/bash -c 'sudo docker compose down'
+ExecStart=/bin/bash -c 'docker compose up'
+ExecStop=/bin/bash -c 'docker compose down'
 Restart=always
 Type=simple
 
