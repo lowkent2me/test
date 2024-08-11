@@ -35,4 +35,4 @@
 
 - name: Start Wazuh with docker-compose
   docker_compose:
-    project_src: '{{ workdir }}'
+    project_src: '{{ workdir }}/single-node'
