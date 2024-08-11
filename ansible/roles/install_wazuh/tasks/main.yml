@@ -29,7 +29,9 @@
 
 - name: Add Docker SDK for python
   pip:
-    name: docker
+    name:
+      - docker
+      - docker-compose
 
 - name: Start Wazuh with docker-compose
   docker_compose:
