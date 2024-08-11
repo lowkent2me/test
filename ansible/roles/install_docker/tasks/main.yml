@@ -2,13 +2,13 @@
   become: true
   yum_repository:
     name: docker
-    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+    baseurl: https://download.docker.com/linux/centos/9/x86_64/stable/
     description: Official Docker repo
     gpgcheck: no
 
 - name: Install latest version
   become: true
-  dnf:
+  yum:
     name:
       - docker-ce
       - docker-ce-cli
