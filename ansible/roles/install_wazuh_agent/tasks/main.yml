@@ -1,0 +1,27 @@
+- name: Add Wazuh repo
+  become: true
+  yum_repository:
+    name: wazuh
+    baseurl: https://packages.wazuh.com/4.x/yum/
+    description: Official Wazuh repo
+    gpgcheck: yes
+    gpgkey: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+    enabled: yes
+    protect: yes
+
+- name: Install latest version
+  become: true
+  yum:
+    name: wazuh-agent
+    update_cache: yes
+    state: latest
+  environment:
+    WAZUH_MANAGER: 192.168.3.131
+
+- name: Start Wazuh agent
+  become: true
+  systemd:
+    name: wazuh-agent
+    state: started
+    enabled: yes
+    daemon_reload: yes
