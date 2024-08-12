@@ -16,7 +16,7 @@
     update_cache: yes
     state: latest
   environment:
-    WAZUH_MANAGER: 192.168.3.131
+    WAZUH_MANAGER: "{{ manager_ip }}"
 
 - name: Start Wazuh agent
   become: true
