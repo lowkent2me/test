@@ -1,5 +1,4 @@
 - name: Create Wazuh workdir
-  become: true
   file:
     path: '{{ workdir }}'
     state: directory

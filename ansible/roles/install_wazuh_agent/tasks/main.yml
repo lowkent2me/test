@@ -1,5 +1,4 @@
 - name: Add Wazuh repo
-  become: true
   yum_repository:
     name: wazuh
     baseurl: https://packages.wazuh.com/4.x/yum/
@@ -10,7 +9,6 @@
     protect: yes
 
 - name: Install latest version
-  become: true
   yum:
     name: wazuh-agent
     update_cache: yes
@@ -19,7 +17,6 @@
     WAZUH_MANAGER: "{{ manager_ip }}"
 
 - name: Start Wazuh agent
-  become: true
   systemd:
     name: wazuh-agent
     state: started
