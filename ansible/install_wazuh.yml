@@ -1,6 +1,6 @@
 ---
 - name: Install Wazuh server
-  hosts: wazuh-manger
+  hosts: wazuh-manager
   become: yes
 
   pre_tasks:
