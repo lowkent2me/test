@@ -26,7 +26,7 @@ services:
       - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
       - SSL_KEY=/etc/ssl/filebeat.key
       - API_USERNAME={{ api_username }}
-      - API_PASSWORD={{ iapi_password }}
+      - API_PASSWORD={{ api_password }}
     volumes:
       - wazuh_api_configuration:/var/ossec/api/configuration
       - wazuh_etc:/var/ossec/etc
@@ -82,7 +82,7 @@ services:
       - DASHBOARD_USERNAME={{ dashb_username }}
       - DASHBOARD_PASSWORD={{ dashb_password }}
       - API_USERNAME={{ api_username }}
-      - API_PASSWORD={{ iapi_password }}
+      - API_PASSWORD={{ api_password }}
     volumes:
       - ./config/wazuh_indexer_ssl_certs/wazuh.dashboard.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
       - ./config/wazuh_indexer_ssl_certs/wazuh.dashboard-key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
