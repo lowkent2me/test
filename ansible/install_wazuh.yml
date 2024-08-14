@@ -1,6 +1,6 @@
 ---
-- name: Install Wazuh
-  hosts: all
+- name: Install Wazuh server
+  hosts: wazuh-manger
   become: yes
 
   pre_tasks:
@@ -11,6 +11,12 @@
       register: docker_check
 
   roles:
-    - { role: install_docker, when: (inventory_hostname == 'wazuh-manager') and (not docker_check.stat.exists) }
-    - { role: install_wazuh, when: inventory_hostname == 'wazuh-manager' }
-    - { role: install_wazuh_agent, when: inventory_hostname == 'wazuh-agent' }
+    - { role: install_docker, when: not docker_check.stat.exists }
+    - install_wazuh
+
+- name: Install Wazuh agent
+  hosts: wazuh-agent
+  become: yes
+
+  roles:
+    - role: install_wazuh_agent
