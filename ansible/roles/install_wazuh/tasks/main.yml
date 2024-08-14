@@ -7,7 +7,7 @@
 - name: Copy basic configs to workdir
   copy:
     src: "{{ role_path }}/files/config"
-    dest: "{{ workdir }}/config"
+    dest: "{{ workdir }}"
     mode: 0744
 
 - name: Copy compose files
