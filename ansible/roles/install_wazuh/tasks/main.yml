@@ -20,11 +20,11 @@
       - "{{ role_path }}/templates/generate-indexer-certs.j2"
   notify: Restart wazuh server
 
-#- name: Add config files from temlate
-#  template:
-#    src: wazuh.j2
-#    dest: "{{ workdir }}/config/wazuh_dashboard/wazuh.yml"
-#  notify: Restart wazuh server
+- name: Add config files from temlate
+  template:
+    src: wazuh.j2
+    dest: "{{ workdir }}/config/wazuh_dashboard/wazuh.yml"
+  notify: Restart wazuh server
 
 - name: set vm.max_map_count to 262144 in sysctl
   sysctl: name={{ item.key }} value={{ item.value }}
