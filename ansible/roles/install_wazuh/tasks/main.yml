@@ -9,6 +9,7 @@
     src: "{{ role_path }}/files/config"
     dest: "{{ workdir }}"
     mode: 0744
+  notify: Restart wazuh server
 
 - name: Copy compose files
   template:
@@ -17,11 +18,13 @@
   with_items:
       - "{{ role_path }}/templates/docker-compose.j2"
       - "{{ role_path }}/templates/generate-indexer-certs.j2"
+  notify: Restart wazuh server
 
 - name: Add config files from temlate
   template:
     src: wazuh.j2
     dest: "{{ workdir }}/config/wazuh_dashboard/wazuh.yml"
+  notify: Restart wazuh server
 
 - name: set vm.max_map_count to 262144 in sysctl
   sysctl: name={{ item.key }} value={{ item.value }}
