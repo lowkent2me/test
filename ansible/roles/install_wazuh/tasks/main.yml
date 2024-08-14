@@ -4,32 +4,37 @@
     state: directory
     mode: 0755
 
-- name: Clone Wazuh repo
-  git:
-    repo: 'https://github.com/wazuh/wazuh-docker.git'
-    dest: '{{ workdir }}'
-    version: v4.8.1
-    single_branch: yes
+- name: Copy basic configs to workdir
+  copy:
+    src: "{{ role_path }}/files/config"
+    dest: "{{ workdir }}/config"
+    mode: 0744
+
+- name: Copy compose files
+  template:
+    src: "{{ item }}"
+    dest: "{{ workdir }}/{{ item.split('.') | first | basename }}.yml"
+  with_items:
+      - "{{ role_path }}/templates/docker-compose.j2"
+      - "{{ role_path }}/templates/generate-indexer-certs.j2"
 
 - name: set vm.max_map_count to 262144 in sysctl
   sysctl: name={{ item.key }} value={{ item.value }}
   with_items:
     - { key: "vm.max_map_count", value: "262144" }
 
+- name: Check if certs exists
+  stat:
+    path: "{{ workdir }}/config/wazuh_indexer_ssl_certs"
+  register: ssl_certs
+
 - name: Run the certificate creation script
   shell: docker compose -f generate-indexer-certs.yml run --rm generator
   args:
-    chdir: '{{ workdir }}/single-node'
+    chdir: '{{ workdir }}'
+  when: not ssl_certs.stat.exists
 
-- name: Add wazuh systemd service file
-  template:
-    src: wazuh.j2
-    dest: /etc/systemd/system/wazuh.service
-    mode: 0755
-
-- name: Start wazuh systemd service
-  systemd:
-    name: wazuh
-    enabled: yes
-    state: started
-    daemon_reload: yes
+- name: Run wazuh server
+  shell: docker compose up -d
+  args:
+    chdir: '{{ workdir }}'

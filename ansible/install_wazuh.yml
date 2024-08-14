@@ -6,18 +6,11 @@
   pre_tasks:
 
     - name: Check if docker is installed
-      shell:
-        cmd: docker --version
-      register: docker_installed
-      ignore_errors: yes
-
-    - name: Check if docker compose is installed
-      shell:
-        cmd: docker compose version
-      register: docker_compose_installed
-      ignore_errors: yes
+      stat:
+        path: /var/lib/docker
+      register: docker_check
 
   roles:
-    - { role: install_docker, when: (inventory_hostname == 'master') and ((docker_installed.failed) or (docker_compose_installed.failed)) }
-    - { role: install_wazuh, when: inventory_hostname == 'master' }
-    - { role: install_wazuh_agent, when: inventory_hostname == 'slave' }
+    - { role: install_docker, when: (inventory_hostname in groups['wazuh_manager']) and (not docker_check.stat.exists) }
+    - { role: install_wazuh, when: inventory_hostname in groups['wazuh_manager'] }
+    - { role: install_wazuh_agent, when: inventory_hostname in groups['wazuh_agent'] }
