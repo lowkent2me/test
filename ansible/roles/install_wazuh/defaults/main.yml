@@ -1,6 +1,6 @@
 wzh_version: 4.8.1
 indexer_username: admin
-indexer_password: SecreetPassword
+indexer_password: SecretPassword
 api_username: wazuh-wui
 api_password: MyS3cr37P450r.*-
 dashb_username: kibanaserver
