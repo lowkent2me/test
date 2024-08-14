@@ -30,14 +30,14 @@ ansible-playbook ./ansible/install_wazuh.yml -i inventory.yml --ask-vault-passwo
 
 - manager_ip (обязательно) - ip адрес ВМ wazuh
 - workdir - путь установки сервера wazuh (по умолчанию /opt/wazzuh/workdir)
-- wzh-version - версия контейнера (по умолчанию 4.8.1)
-- indexer-username - логин для входа в веб интерфейс (по умолчанию admin)
-- indexer-password - пароль для входа в веб интерфейс (по умолчанию SecreetPassword)
-- api-username - API login (по умолчанию wazuh-wui)
-- api-password - API password (по умолчанию MyS3cr37P450r.*-)
-- dashb-username - dashboard login (по умолчанию kibanaserver)
-- dashb-password - dashboard password (по умолчанию kibanaserver)
-- certgen-version - версия контейнера генерации сертификатов wazuh (по умолчанию 0.0.2)
+- wzh_version - версия контейнера (по умолчанию 4.8.1)
+- indexer_username - логин для входа в веб интерфейс (по умолчанию admin)
+- indexer_password - пароль для входа в веб интерфейс (по умолчанию SecreetPassword)
+- api_username - API login (по умолчанию wazuh-wui)
+- api_password - API password (по умолчанию MyS3cr37P450r.*-)
+- dashb_username - dashboard login (по умолчанию kibanaserver)
+- dashb_password - dashboard password (по умолчанию kibanaserver)
+- certgen_version - версия контейнера генерации сертификатов wazuh (по умолчанию 0.0.2)
 
 ```
 #Запуск с переопределением переменных

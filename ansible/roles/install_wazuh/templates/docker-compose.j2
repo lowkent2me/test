@@ -2,7 +2,7 @@
 
 services:
   wazuh.manager:
-    image: wazuh/wazuh-manager:{{ wzh-version }}
+    image: wazuh/wazuh-manager:{{ wzh_version }}
     hostname: wazuh.manager
     restart: always
     ulimits:
@@ -19,14 +19,14 @@ services:
       - "55000:55000"
     environment:
       - INDEXER_URL=https://wazuh.indexer:9200
-      - INDEXER_USERNAME={{ indexer-username }}
-      - INDEXER_PASSWORD={{ indexer-password }}
+      - INDEXER_USERNAME={{ indexer_username }}
+      - INDEXER_PASSWORD={{ indexer_password }}
       - FILEBEAT_SSL_VERIFICATION_MODE=full
       - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
       - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
       - SSL_KEY=/etc/ssl/filebeat.key
-      - API_USERNAME={{ api-username }}
-      - API_PASSWORD={{ api-password }}
+      - API_USERNAME={{ api_username }}
+      - API_PASSWORD={{ api_password }}
     volumes:
       - wazuh_api_configuration:/var/ossec/api/configuration
       - wazuh_etc:/var/ossec/etc
@@ -76,13 +76,13 @@ services:
     ports:
       - 443:5601
     environment:
-      - INDEXER_USERNAME={{ indexer-username }}
-      - INDEXER_PASSWORD={{ indexer-password }}
+      - INDEXER_USERNAME={{ indexer_username }}
+      - INDEXER_PASSWORD={{ indexer_password }}
       - WAZUH_API_URL=https://wazuh.manager
-      - DASHBOARD_USERNAME={{ dashb-username }}
-      - DASHBOARD_PASSWORD={{ dashb-password }}
-      - API_USERNAME={{ api-username }}
-      - API_PASSWORD={{ api-password }}
+      - DASHBOARD_USERNAME={{ dashb_username }}
+      - DASHBOARD_PASSWORD={{ dashb_password }}
+      - API_USERNAME={{ api_username }}
+      - API_PASSWORD={{ api_password }}
     volumes:
       - ./config/wazuh_indexer_ssl_certs/wazuh.dashboard.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
       - ./config/wazuh_indexer_ssl_certs/wazuh.dashboard-key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
