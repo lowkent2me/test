@@ -35,6 +35,6 @@
   when: not ssl_certs.stat.exists
 
 - name: Run wazuh server
-  shell: docker compose up -d
-  args:
-    chdir: '{{ workdir }}'
+  community.docker.docker_compose_v2:
+    project_src: "{{ workdir }}"
+
