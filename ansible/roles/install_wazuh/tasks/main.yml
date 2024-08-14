@@ -18,6 +18,11 @@
       - "{{ role_path }}/templates/docker-compose.j2"
       - "{{ role_path }}/templates/generate-indexer-certs.j2"
 
+- name: Add config files from temlate
+  template:
+    src: wazuh.j2
+    dest: "{{ workdir }}/config/wazuh_dashboard/wazuh.yml"
+
 - name: set vm.max_map_count to 262144 in sysctl
   sysctl: name={{ item.key }} value={{ item.value }}
   with_items:
@@ -37,4 +42,3 @@
 - name: Run wazuh server
   community.docker.docker_compose_v2:
     project_src: "{{ workdir }}"
-
